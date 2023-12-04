@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TuDu</title>
+    <link rel="stylesheet" href="stylesheet.css">
+<style>
+    img{
+        display:block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    input{
+            display: block;
+            margin: 0 auto;
+        }
+    button{
+            display: block;
+            margin: 0 auto;
+        }
+
+        p {
+            text-align: center;
+        }
+
+
+</style>
+</head>
+
+<body>
+    <img src="logos/logo-transparent-png.png" alt="TuDu Logo" title="TuDu Logo"
+ style="max-width: 50%; max-height: 50%;">
+ <p>Click New List to create a new TuDu list or select from your existing lists</p>
+<button onclick="createList(); hideButton(this)"; name=newList>New List</button>
+
+<script>
+    // definitions
+    console.log("createList called")
+    var body = document.body
+    var input = document.createElement("input");
+    var button = document.querySelector("button")
+    var newItem = document.createElement("button")
+    var confirm = document.createElement("button")
+    var numInput = 0
+    newItem.innerHTML = "New Item"
+    confirm.innerHTML = "Create List!"
+    newItem.onclick = function(){
+        createInput();
+        hideButton(newItem)
+        hideButton(confirm)
+    }
+    input.type = "text";
+    input.placeholder = "Enter something TuDu!"
+   
+    // hide button
+    function hideButton(button) {
+    button.style.display = "none";
+    }
+
+    // start creating list
+    function createList() {
+    body.appendChild(input);
+    document.body.appendChild(newItem);
+    numInput =+ 1;
+    document.body.appendChild(confirm)
+    
+    }
+
+    function createInput() {
+    numInput = numInput + 1;
+    var newInput = document.createElement("input");
+    newInput.type = "text";
+    newInput.placeholder = "Enter something TuDu!";
+
+    var delete1 = document.createElement("button");
+    if (numInput == 1) {
+        delete1.style.display = "none";
+    }
+
+    delete1.innerHTML = "-";
+    delete1.onclick = function () {
+    numInput = numInput - 1;
+    input.style.display = "none";
+    };
+
+    var container = document.createElement("div");
+    container.style.display = "flex";
+    container.appendChild(newInput);
+    container.appendChild(delete1);
+
+    var newButton = document.createElement("button");
+    newButton.innerHTML = "New Item";
+    newButton.onclick = function () {
+        createInput();
+        hideButton(newButton);
+        hideButton(confirm2);
+        hideButton(delete1);
+    };
+
+    var confirm2 = document.createElement("button");
+    confirm2.innerHTML = "Create List!";
+    confirm2.onclick = function () {
+        // confirm2 functionality
+    };
+
+    body.appendChild(container);
+    body.appendChild(newButton);
+    body.appendChild(confirm2);
+}
+
+
+    
+
+</script>
+</body>
+
+
+</html>
