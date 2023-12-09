@@ -30,88 +30,126 @@
 <body>
     <img src="logos/logo-transparent-png.png" alt="TuDu Logo" title="TuDu Logo"
  style="max-width: 50%; max-height: 50%;">
- <p>Click New List to create a new TuDu list or select from your existing lists</p>
+ <p>Click New List to create a new TuDu list</p>
 <button onclick="createList(); hideButton(this)"; name=newList>New List</button>
+<div id="titleDisplay"></div>
+<p id="existingLists"></p>
 
 <script>
-    // definitions
-    console.log("createList called")
-    var body = document.body
-    var input = document.createElement("input");
-    var button = document.querySelector("button")
-    var newItem = document.createElement("button")
-    var confirm = document.createElement("button")
-    var numInput = 0
-    newItem.innerHTML = "New Item"
-    confirm.innerHTML = "Create List!"
-    newItem.onclick = function(){
+    var body = document.body;
+    var title = document.createElement("input");
+    var inputs = [];
+    var newItem = document.createElement("button");
+    var confirm2 = document.createElement("button");
+    var checklist = document.createElement("ul");
+
+    newItem.innerHTML = "New Item";
+    newItem.onclick = function () {
         createInput();
-        hideButton(newItem)
-        hideButton(confirm)
-    }
-    input.type = "text";
-    input.placeholder = "Enter something TuDu!"
-   
-    // hide button
+    };
+    hideButton(newItem);
+
+    title.type = "text";
+    title.placeholder = "List Title";
+    hideButton(title);
+
     function hideButton(button) {
-    button.style.display = "none";
+        button.style.display = "none";
     }
 
-    // start creating list
+    function showButton(button) {
+        button.style.display = "block";
+    }
+
     function createList() {
-    body.appendChild(input);
-    document.body.appendChild(newItem);
-    numInput =+ 1;
-    document.body.appendChild(confirm)
-    
+        console.log("createList called");
+        body.appendChild(title);
+        document.body.appendChild(newItem);
+        document.body.appendChild(confirm2);
+        showButton(title);
+        showButton(newItem);
+        showButton(confirm2);
+        hideButton(document.querySelector("button[name=newList]"));
     }
 
     function createInput() {
-    numInput = numInput + 1;
-    var newInput = document.createElement("input");
-    newInput.type = "text";
-    newInput.placeholder = "Enter something TuDu!";
+        var newInput = document.createElement("input");
+        newInput.type = "text";
+        newInput.placeholder = "Enter something TuDu!";
 
-    var delete1 = document.createElement("button");
-    if (numInput == 1) {
-        delete1.style.display = "none";
+        var deleteButton = document.createElement("button");
+        deleteButton.innerHTML = "-";
+        deleteButton.onclick = function () {
+            var index = inputs.indexOf(newInput);
+            if (index !== -1) {
+                inputs.splice(index, 1);
+            }
+            newInput.parentElement.remove();
+            hideButton(deleteButton); // Hide the corresponding delete button
+        };
+
+        // Assign a unique ID to the delete button
+        deleteButton.id = "deleteButton" + inputs.length;
+
+        inputs.push(newInput);
+
+        var container = document.createElement("div");
+        container.style.display = "flex";
+        container.appendChild(newInput);
+        container.appendChild(deleteButton);
+
+        body.appendChild(container);
     }
 
-    delete1.innerHTML = "-";
-    delete1.onclick = function () {
-    numInput = numInput - 1;
-    input.style.display = "none";
-    };
+    function createChecklist() {
+        for (var i = 0; i < inputs.length; i++) {
+            var inputValue = inputs[i].value.trim();
+            if (inputValue !== "") {
+                // Create a list item
+                var listItem = document.createElement("li");
 
-    var container = document.createElement("div");
-    container.style.display = "flex";
-    container.appendChild(newInput);
-    container.appendChild(delete1);
+                // Create a checkbox
+                var checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
 
-    var newButton = document.createElement("button");
-    newButton.innerHTML = "New Item";
-    newButton.onclick = function () {
-        createInput();
-        hideButton(newButton);
-        hideButton(confirm2);
-        hideButton(delete1);
-    };
+                // Create a label for the checkbox
+                var label = document.createElement("label");
+                label.appendChild(document.createTextNode(inputValue));
 
-    var confirm2 = document.createElement("button");
+                // Append the checkbox and label to the list item
+                listItem.appendChild(checkbox);
+                listItem.appendChild(label);
+
+                // Append the list item to the checklist
+                checklist.appendChild(listItem);
+            }
+        }
+        body.appendChild(checklist);
+    }
+
+    function hideInputs() {
+
+        // Hide each input created by createInput
+        for (var i = 0; i < inputs.length; i++) {
+            hideButton(inputs[i]);
+
+            // Hide the corresponding delete button
+            hideButton(document.getElementById("deleteButton" + i));
+        }
+    }
+
     confirm2.innerHTML = "Create List!";
     confirm2.onclick = function () {
-        // confirm2 functionality
+        var titleValue = title.value.trim();
+        console.log("title = " + titleValue);
+        createChecklist();
+        hideInputs();
+        // hideButton(newItem);
+        // hideButton(confirm2);
     };
-
-    body.appendChild(container);
-    body.appendChild(newButton);
-    body.appendChild(confirm2);
-}
-
-
-    
-
 </script>
+
+
 </body>
 
 
